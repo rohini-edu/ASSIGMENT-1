@@ -1,7 +1,7 @@
 --# 25 Questions on WHERE
 
 --1. Find customers born after the year 1990.
-SELECT * FROM sh.Customer WHERE YEAR(DateOfBirth) > 1990;
+--SELECT * FROM sh.Customer WHERE YEAR(DateOfBirth) > 1990;
 
 2. List all male customers (`CUST_GENDER = 'M'`).
 --SELECT * FROM sh.Customer WHERE CUST_GENDER = 'M';
