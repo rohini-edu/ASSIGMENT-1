@@ -1,4 +1,4 @@
-A. Aggregation & Grouping
+--A. Aggregation & Grouping
 -- select * from sh.customers
 
 -- 1.Find the total, average, minimum, and maximum credit limit of all customers.
@@ -47,7 +47,7 @@ A. Aggregation & Grouping
 -- 10.List countries where the average credit limit is higher than the global average.
 
 --select country_id,avg(cust_credit_limit) average from sh.customers
-group by country_id having avg(cust_credit_limit) > ( select avg(cust_credit_limit) from sh.customers) order by average desc
+--group by country_id having avg(cust_credit_limit) > ( select avg(cust_credit_limit) from sh.customers) order by average desc
 
 -- 11.Calculate the variance and standard deviation of customer credit limits by country.
 
@@ -60,7 +60,7 @@ group by country_id having avg(cust_credit_limit) > ( select avg(cust_credit_lim
 --  13.Show the total number of customers per income level and the percentage contribution of each.
 
 --select cust_income_level,count(*),
-round(100.0*count()/sum(count()) over (),2) percentage_contribution from sh.customers group by cust_income_level order by count(*) desc
+--round(100.0*count()/sum(count()) over (),2) percentage_contribution from sh.customers group by cust_income_level order by count(*) desc
 
 -- 14.For each income level, find how many customers have NULL credit limits.
 
@@ -187,20 +187,20 @@ round(100.0*count()/sum(count()) over (),2) percentage_contribution from sh.cust
 -- 21.Show cumulative percentage of total credit limit per country.
 
 --select country_id,cust_credit_limit,sum(cust_credit_limit) over (partition by country_id order by cust_credit_limit) cumulative_credit,
-round(100*sum(cust_credit_limit) over (partition by country_id order by cust_credit_limit)/sum(cust_credit_limit) over(partition by country_id),2) cumulative_percentage from sh.customers
+--round(100*sum(cust_credit_limit) over (partition by country_id order by cust_credit_limit)/sum(cust_credit_limit) over(partition by country_id),2) cumulative_percentage from sh.customers
 
 ---- 22.Rank customers by age (derived from CUST_YEAR_OF_BIRTH).
 
 --select cust_id,cust_year_of_birth,extract(year from sysdate) - cust_year_of_birth age,
-rank() over(order by(extract (year from sysdate) - cust_year_of_birth)desc) age_rank from sh.customers
+--rank() over(order by(extract (year from sysdate) - cust_year_of_birth)desc) age_rank from sh.customers
 
 -- 23.Calculate difference in age between current and previous customer in the same state.
 
 --select cust_id,cust_year_of_birth,cust_state_province,
-(extract(year from sysdate)- cust_year_of_birth) age,
-lag(extract(year from sysdate)-cust_year_of_birth)over(partition by cust_state_province order by cust_id) previous_age,
-(extract(year from sysdate)- cust_year_of_birth) - lag(extract(year from sysdate)-cust_year_of_birth)over(partition by cust_state_province order by cust_id) age_difference 
-from sh.customers where cust_year_of_birth is not null
+--(extract(year from sysdate)- cust_year_of_birth) age,
+--lag(extract(year from sysdate)-cust_year_of_birth)over(partition by cust_state_province order by cust_id) previous_age,
+--(extract(year from sysdate)- cust_year_of_birth) - lag(extract(year from sysdate)-cust_year_of_birth)over(partition by cust_state_province order by cust_id) age_difference 
+--from sh.customers where cust_year_of_birth is not null
 
 -- 24.Use RANK() and DENSE_RANK() to show how ties are treated differently.
 
@@ -225,8 +225,8 @@ from sh.customers where cust_year_of_birth is not null
 -- 27.Find customers whose credit limit is above the 90th percentile of their income level.
 
 --select cust_id,cust_income_level,cust_credit_limit from sh.customers
-where cust_credit_limit > percentile_cont(0.9) over (order by cust_credit_limit) within group (partition by cust_income_level)
-order by cust_income_level, cust_credit_limit desc
+--where cust_credit_limit > percentile_cont(0.9) over (order by cust_credit_limit) within group (partition by cust_income_level)
+--order by cust_income_level, cust_credit_limit desc
 
 -- 28.Display top 3 and bottom 3 customers per country by credit limit.
 
@@ -259,8 +259,8 @@ order by cust_income_level, cust_credit_limit desc
 -- 29.Calculate rolling sum of 5 customers’ credit limit within each country.
 
 --select cust_id,country_id,cust_credit_limit,
-sum(cust_credit_limit) over(partition by country_id order by cust_id rows between 4 preceding and current row) rolling_sum_5
-from sh.customers
+--sum(cust_credit_limit) over(partition by country_id order by cust_id rows between 4 preceding and current row) rolling_sum_5
+--from sh.customers
 
 -- 30.For each marital status, display the most and least wealthy customers using analytical functions.
 
@@ -439,3 +439,4 @@ from sh.customers
 --select cust_id,cust_credit_limit,
 --nvl(cust_credit_limit, avg(cust_credit_limit) over (partition by cust_id)) adjusted_credit_limit
 --from sh.customers
+
